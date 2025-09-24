@@ -4,9 +4,10 @@ node_modules/
 */node_modules/
 
 # Environment variables - ignore all .env files
-.env
-.env.*
-**/.env
-**/.env.*
+
 /frontend/dist
 /backend/.env
+/frontend/.env
+/test.md
+/.vscode
+/.vscode/*
