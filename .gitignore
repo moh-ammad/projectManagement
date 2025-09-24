@@ -1,0 +1,10 @@
+# Dependencies - ignore node_modules anywhere
+node_modules/
+**/node_modules/
+*/node_modules/
+
+# Environment variables - ignore all .env files
+.env
+.env.*
+**/.env
+**/.env.*
