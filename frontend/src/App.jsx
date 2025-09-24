@@ -103,6 +103,8 @@ function App() {
                 </ProtectedLayout>
               } 
             />
+            {/* Catch all unmatched routes and redirect to dashboard if authenticated, otherwise to login */}
+            <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
           <ToastContainer
             position="top-right"
