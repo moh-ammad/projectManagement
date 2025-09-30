@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🚀 Starting Role-Based Admin Dashboard..."
+echo "🚀 Starting Project Management System..."
 echo ""
 
 # Function to kill background processes on exit
@@ -15,7 +15,7 @@ cleanup() {
 trap cleanup SIGINT SIGTERM EXIT
 
 # Start backend server
-echo "📡 Starting Backend Server (Port 3001)..."
+echo "📡 Starting Backend Server (Port 3000)..."
 cd backend
 npm run dev &
 BACKEND_PID=$!
@@ -33,7 +33,7 @@ cd ..
 
 echo ""
 echo "✅ Servers started successfully!"
-echo "📡 Backend API: http://localhost:3001"
+echo "📡 Backend API: http://localhost:3000"
 echo "🎨 Frontend App: http://localhost:5173"
 echo ""
 echo "Press Ctrl+C to stop both servers"

@@ -1,8 +1,10 @@
 {
-  "name": "admin-dashboard-frontend",
+  "name": "project-management-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "Project Management System - React Frontend",
+  "author": "Digital Bevy",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

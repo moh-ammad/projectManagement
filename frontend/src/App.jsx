@@ -1,4 +1,3 @@
-import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -10,13 +9,14 @@ import Landing from './pages/Landing.jsx'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import Dashboard from './pages/Dashboard.jsx'
-import Users from './pages/Users.jsx'
+import Employees from './pages/Employees.jsx'
 import Projects from './pages/Projects.jsx'
 import Tasks from './pages/Tasks.jsx'
 import Activities from './pages/Activities.jsx'
 import Reports from './pages/Reports.jsx'
 import Settings from './pages/Settings.jsx'
 import Profile from './pages/Profile.jsx'
+import Notifications from './pages/Notifications.jsx'
 
 const ProtectedLayout = ({ children }) => (
   <ProtectedRoute>
@@ -51,7 +51,7 @@ function App() {
               path="/users" 
               element={
                 <ProtectedLayout>
-                  <Users />
+                  <Employees />
                 </ProtectedLayout>
               } 
             />
@@ -95,11 +95,19 @@ function App() {
                 </ProtectedLayout>
               } 
             />
-            <Route 
+                        <Route 
               path="/profile" 
               element={
                 <ProtectedLayout>
                   <Profile />
+                </ProtectedLayout>
+              } 
+            />
+            <Route 
+              path="/notifications" 
+              element={
+                <ProtectedLayout>
+                  <Notifications />
                 </ProtectedLayout>
               } 
             />

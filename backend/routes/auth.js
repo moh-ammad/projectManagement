@@ -1,6 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const User = require('../models/Employee');
 const { auth } = require('../middleware/auth');
 const { logActivity } = require('../middleware/activityLogger');
 

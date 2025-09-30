@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext.jsx'
 import axios from 'axios'
-import { Users, FolderOpen, UserCheck, Activity, Clock, TrendingUp, AlertCircle } from 'lucide-react'
+import { Users, FolderOpen, Activity, Clock, TrendingUp, AlertCircle } from 'lucide-react'
 
 const Dashboard = () => {
   const { user } = useAuth();
   const [stats, setStats] = useState({
-    totalUsers: 0,
+    totalEmployees: 0,
     totalProjects: 0,
-    myProjects: 0,
     activeProjects: 0
   });
   const [recentProjects, setRecentProjects] = useState([]);
@@ -27,24 +26,23 @@ const Dashboard = () => {
 
       // Add different requests based on role
       if (user.role === 'user') {
-        requests.push(axios.get('/api/tasks')); // Users see tasks
+        requests.push(axios.get('/api/tasks')); // Employees see tasks
       } else {
         requests.push(axios.get('/api/projects')); // Admin/Manager see projects
         requests.push(axios.get('/api/activities?limit=10'));
       }
 
       const responses = await Promise.all(requests);
-      const [usersRes, dataRes, activitiesRes] = responses;
+      const [employeesRes, dataRes, activitiesRes] = responses;
 
-      const users = usersRes.data.users;
+      const employees = employeesRes.data.users;
 
       if (user.role === 'user') {
-        // For users, show task statistics
+        // For employees, show task statistics
         const tasks = dataRes.data.tasks;
         setStats({
-          totalUsers: users.length,
+          totalEmployees: employees.length,
           totalProjects: tasks.length, // Show as "My Tasks"
-          myProjects: tasks.length,
           activeProjects: tasks.filter(t => t.status === 'in-progress').length
         });
         setRecentProjects(tasks.slice(0, 5)); // Show recent tasks
@@ -52,9 +50,8 @@ const Dashboard = () => {
         // For admin/manager, show project statistics
         const projects = dataRes.data.projects;
         setStats({
-          totalUsers: users.length,
+          totalEmployees: employees.length,
           totalProjects: projects.length,
-          myProjects: user.role === 'manager' ? projects.length : projects.filter(p => p.assignedTo._id === user.id).length,
           activeProjects: projects.filter(p => p.status === 'in-progress').length
         });
         setRecentProjects(projects.slice(0, 5));
@@ -109,12 +106,12 @@ const Dashboard = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <div className="stats-card bg-gradient-to-br from-primary-500 to-primary-700">
-          <div className="text-3xl font-bold mb-2">{stats.totalUsers}</div>
+          <div className="text-3xl font-bold mb-2">{stats.totalEmployees}</div>
           <div className="flex items-center text-sm opacity-90">
             <Users size={16} className="mr-2" />
-            {user.role === 'admin' ? 'Total Users' : user.role === 'manager' ? 'My Team' : 'Team Members'}
+            {user.role === 'admin' ? 'Total Employees' : user.role === 'manager' ? 'My Team' : 'Team Members'}
           </div>
         </div>
 
@@ -131,14 +128,6 @@ const Dashboard = () => {
           <div className="flex items-center text-sm opacity-90">
             <Activity size={16} className="mr-2" />
             Active Projects
-          </div>
-        </div>
-
-        <div className="stats-card bg-gradient-to-br from-primary-600 to-secondary-600">
-          <div className="text-3xl font-bold mb-2">{stats.myProjects}</div>
-          <div className="flex items-center text-sm opacity-90">
-            <UserCheck size={16} className="mr-2" />
-            {user.role === 'user' ? 'Assigned to Me' : 'Under Management'}
           </div>
         </div>
       </div>

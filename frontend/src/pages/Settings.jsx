@@ -38,8 +38,17 @@ const Settings = () => {
     notifications: {
       emailNotifications: true,
       taskDeadlineReminder: true,
+      deadlineReminderDays: 2,
+      reminderTime: '09:00',
       projectStatusUpdates: true,
-      weeklyReports: true
+      statusChangeNotification: true,
+      newProjectAssignment: true,
+      weeklyReports: true,
+      weeklyReportDay: 'friday',
+      weeklyReportTime: '09:00',
+      overdueTasks: true,
+      teamUpdates: true,
+      systemUpdates: true
     }
   });
 
@@ -93,8 +102,17 @@ const Settings = () => {
         notifications: {
           emailNotifications: true,
           taskDeadlineReminder: true,
+          deadlineReminderDays: 2,
+          reminderTime: '09:00',
           projectStatusUpdates: true,
-          weeklyReports: true
+          statusChangeNotification: true,
+          newProjectAssignment: true,
+          weeklyReports: true,
+          weeklyReportDay: 'friday',
+          weeklyReportTime: '09:00',
+          overdueTasks: true,
+          teamUpdates: true,
+          systemUpdates: true
         }
       });
     }
@@ -127,6 +145,24 @@ const Settings = () => {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">System Settings</h1>
         <p className="text-gray-600">Configure system defaults and preferences</p>
+        
+        {/* Email Setup Guide */}
+        <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+          <div className="flex items-start">
+            <CheckCircle className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-green-800">Email Notifications Ready</h3>
+              <div className="mt-1 text-sm text-green-700">
+                <p>Email notifications are configured! Make sure to:</p>
+                <ul className="mt-2 list-disc list-inside space-y-1">
+                  <li>Enable "Email Notifications" toggle in the Notification Settings section below</li>
+                  <li>Configure your preferred reminder times and notification types</li>
+                  <li>Update your email address in your <a href="/profile" className="font-semibold underline">Profile</a> if needed</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="space-y-6">
@@ -332,57 +368,219 @@ const Settings = () => {
             Notification Settings
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="emailNotifications"
-                className="mr-2"
-                checked={settings.notifications.emailNotifications}
-                onChange={(e) => updateSetting('notifications', 'emailNotifications', e.target.checked)}
-              />
-              <label htmlFor="emailNotifications" className="text-sm text-gray-700">
-                Enable email notifications
-              </label>
+          <div className="space-y-6">
+            {/* Master Email Toggle */}
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="emailNotifications"
+                  className="mr-3"
+                  checked={settings.notifications.emailNotifications}
+                  onChange={(e) => updateSetting('notifications', 'emailNotifications', e.target.checked)}
+                />
+                <label htmlFor="emailNotifications" className="text-base font-medium text-blue-900">
+                  Enable Email Notifications
+                </label>
+              </div>
+              <p className="text-sm text-blue-700 mt-2 ml-6">
+                Master switch for all email notifications. When disabled, no emails will be sent.
+              </p>
             </div>
 
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="taskDeadlineReminder"
-                className="mr-2"
-                checked={settings.notifications.taskDeadlineReminder}
-                onChange={(e) => updateSetting('notifications', 'taskDeadlineReminder', e.target.checked)}
-              />
-              <label htmlFor="taskDeadlineReminder" className="text-sm text-gray-700">
-                Task deadline reminders
-              </label>
-            </div>
+            {/* Individual Notification Settings */}
+            <div className={`space-y-4 ${!settings.notifications.emailNotifications ? 'opacity-50 pointer-events-none' : ''}`}>
+              
+              {/* Task Deadline Reminders */}
+              <div className="border border-gray-200 p-4 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="taskDeadlineReminder"
+                      className="mr-3"
+                      checked={settings.notifications.taskDeadlineReminder}
+                      onChange={(e) => updateSetting('notifications', 'taskDeadlineReminder', e.target.checked)}
+                    />
+                    <label htmlFor="taskDeadlineReminder" className="text-sm font-medium text-gray-900">
+                      Task Deadline Reminders
+                    </label>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-600 ml-6 mb-3">
+                  Send email reminders for upcoming task deadlines
+                </p>
+                <div className="ml-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-xs text-gray-700 mb-1">Remind me</label>
+                    <select
+                      className="form-select text-xs"
+                      value={settings.notifications.deadlineReminderDays || 2}
+                      onChange={(e) => updateSetting('notifications', 'deadlineReminderDays', parseInt(e.target.value))}
+                    >
+                      <option value={1}>1 day before</option>
+                      <option value={2}>2 days before</option>
+                      <option value={3}>3 days before</option>
+                      <option value={7}>1 week before</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-700 mb-1">Reminder time</label>
+                    <select
+                      className="form-select text-xs"
+                      value={settings.notifications.reminderTime || '09:00'}
+                      onChange={(e) => updateSetting('notifications', 'reminderTime', e.target.value)}
+                    >
+                      <option value="09:00">9:00 AM</option>
+                      <option value="12:00">12:00 PM</option>
+                      <option value="15:00">3:00 PM</option>
+                      <option value="18:00">6:00 PM</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
 
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="projectStatusUpdates"
-                className="mr-2"
-                checked={settings.notifications.projectStatusUpdates}
-                onChange={(e) => updateSetting('notifications', 'projectStatusUpdates', e.target.checked)}
-              />
-              <label htmlFor="projectStatusUpdates" className="text-sm text-gray-700">
-                Project status update notifications
-              </label>
-            </div>
+              {/* Project Status Updates */}
+              <div className="border border-gray-200 p-4 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="projectStatusUpdates"
+                      className="mr-3"
+                      checked={settings.notifications.projectStatusUpdates}
+                      onChange={(e) => updateSetting('notifications', 'projectStatusUpdates', e.target.checked)}
+                    />
+                    <label htmlFor="projectStatusUpdates" className="text-sm font-medium text-gray-900">
+                      Project Status Update Notifications
+                    </label>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-600 ml-6 mb-3">
+                  Get notified when project status changes or important updates occur
+                </p>
+                <div className="ml-6">
+                  <div className="space-y-2">
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="statusChangeNotification"
+                        className="mr-2"
+                        checked={settings.notifications.statusChangeNotification !== false}
+                        onChange={(e) => updateSetting('notifications', 'statusChangeNotification', e.target.checked)}
+                      />
+                      <label htmlFor="statusChangeNotification" className="text-xs text-gray-700">
+                        Status changes (pending → in-progress → completed)
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="newProjectAssignment"
+                        className="mr-2"
+                        checked={settings.notifications.newProjectAssignment !== false}
+                        onChange={(e) => updateSetting('notifications', 'newProjectAssignment', e.target.checked)}
+                      />
+                      <label htmlFor="newProjectAssignment" className="text-xs text-gray-700">
+                        New project assignments
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="weeklyReports"
-                className="mr-2"
-                checked={settings.notifications.weeklyReports}
-                onChange={(e) => updateSetting('notifications', 'weeklyReports', e.target.checked)}
-              />
-              <label htmlFor="weeklyReports" className="text-sm text-gray-700">
-                Weekly progress reports
-              </label>
+              {/* Weekly Progress Reports */}
+              <div className="border border-gray-200 p-4 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="weeklyReports"
+                      className="mr-3"
+                      checked={settings.notifications.weeklyReports}
+                      onChange={(e) => updateSetting('notifications', 'weeklyReports', e.target.checked)}
+                    />
+                    <label htmlFor="weeklyReports" className="text-sm font-medium text-gray-900">
+                      Weekly Progress Reports
+                    </label>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-600 ml-6 mb-3">
+                  Receive weekly summaries of your projects and tasks
+                </p>
+                <div className="ml-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs text-gray-700 mb-1">Send on</label>
+                    <select
+                      className="form-select text-xs"
+                      value={settings.notifications.weeklyReportDay || 'friday'}
+                      onChange={(e) => updateSetting('notifications', 'weeklyReportDay', e.target.value)}
+                    >
+                      <option value="monday">Monday</option>
+                      <option value="tuesday">Tuesday</option>
+                      <option value="wednesday">Wednesday</option>
+                      <option value="thursday">Thursday</option>
+                      <option value="friday">Friday</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-700 mb-1">Time</label>
+                    <select
+                      className="form-select text-xs"
+                      value={settings.notifications.weeklyReportTime || '09:00'}
+                      onChange={(e) => updateSetting('notifications', 'weeklyReportTime', e.target.value)}
+                    >
+                      <option value="08:00">8:00 AM</option>
+                      <option value="09:00">9:00 AM</option>
+                      <option value="10:00">10:00 AM</option>
+                      <option value="17:00">5:00 PM</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional Notification Options */}
+              <div className="border border-gray-200 p-4 rounded-lg">
+                <h4 className="text-sm font-medium text-gray-900 mb-3">Additional Options</h4>
+                <div className="space-y-2">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="overdueTasks"
+                      className="mr-2"
+                      checked={settings.notifications.overdueTasks !== false}
+                      onChange={(e) => updateSetting('notifications', 'overdueTasks', e.target.checked)}
+                    />
+                    <label htmlFor="overdueTasks" className="text-xs text-gray-700">
+                      Overdue task notifications
+                    </label>
+                  </div>
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="teamUpdates"
+                      className="mr-2"
+                      checked={settings.notifications.teamUpdates !== false}
+                      onChange={(e) => updateSetting('notifications', 'teamUpdates', e.target.checked)}
+                    />
+                    <label htmlFor="teamUpdates" className="text-xs text-gray-700">
+                      Team member task completions (Managers only)
+                    </label>
+                  </div>
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="systemUpdates"
+                      className="mr-2"
+                      checked={settings.notifications.systemUpdates !== false}
+                      onChange={(e) => updateSetting('notifications', 'systemUpdates', e.target.checked)}
+                    />
+                    <label htmlFor="systemUpdates" className="text-xs text-gray-700">
+                      System maintenance and updates
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

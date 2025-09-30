@@ -1,12 +1,12 @@
 const express = require('express');
-const User = require('../models/User');
+const User = require('../models/Employee');
 const { auth, authorize, canManageUser } = require('../middleware/auth');
 const { logActivity } = require('../middleware/activityLogger');
 
 const router = express.Router();
 
 // @route   POST /api/users
-// @desc    Create new user (Admin creates manager/user, Manager creates user)
+// @desc    Create new employee (Admin creates manager/employee, Manager creates employee)
 // @access  Private (Admin, Manager)
 router.post('/', auth, authorize('admin', 'manager'), async (req, res) => {
   try {
@@ -82,7 +82,7 @@ router.post('/', auth, authorize('admin', 'manager'), async (req, res) => {
 });
 
 // @route   GET /api/users
-// @desc    Get users based on role permissions
+// @desc    Get employees based on role permissions
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {
@@ -117,7 +117,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // @route   GET /api/users/:id
-// @desc    Get single user
+// @desc    Get single employee
 // @access  Private
 router.get('/:id', auth, canManageUser, async (req, res) => {
   try {
@@ -138,7 +138,7 @@ router.get('/:id', auth, canManageUser, async (req, res) => {
 });
 
 // @route   PUT /api/users/:id
-// @desc    Update user
+// @desc    Update employee
 // @access  Private
 router.put('/:id', auth, canManageUser, async (req, res) => {
   try {
@@ -190,7 +190,7 @@ router.put('/:id', auth, canManageUser, async (req, res) => {
 });
 
 // @route   PUT /api/users/:id/password
-// @desc    Change user password
+// @desc    Change employee password
 // @access  Private (Self only)
 router.put('/:id/password', auth, async (req, res) => {
   try {
@@ -236,7 +236,7 @@ router.put('/:id/password', auth, async (req, res) => {
 });
 
 // @route   DELETE /api/users/:id
-// @desc    Delete user (soft delete by setting isActive to false)
+// @desc    Delete employee (soft delete by setting isActive to false)
 // @access  Private
 router.delete('/:id', auth, canManageUser, async (req, res) => {
   try {

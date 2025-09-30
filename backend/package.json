@@ -1,23 +1,24 @@
 {
-  "name": "backend",
+  "name": "project-management-backend",
   "version": "1.0.0",
-  "description": "Role-based Admin Dashboard Backend",
+  "description": "Project Management System - Backend API with email notifications",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["project-management", "nodejs", "express", "mongodb", "notifications"],
+  "author": "Digital Bevy",
+  "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.2",
-    "bcryptjs": "^2.4.3",
-    "dotenv": "^16.3.1"
+    "node-cron": "^4.2.1",
+    "nodemailer": "^7.0.6"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

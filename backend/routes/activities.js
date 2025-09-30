@@ -20,7 +20,7 @@ router.get('/', auth, async (req, res) => {
       query.user = currentUser._id;
     } else if (currentUser.role === 'manager') {
       // Managers can see activities of users they manage
-      const User = require('../models/User');
+      const User = require('../models/Employee');
       const managedUsers = await User.find({
         $or: [
           { manager: currentUser._id },
@@ -71,7 +71,7 @@ router.get('/stats', auth, authorize('admin', 'manager'), async (req, res) => {
     let matchQuery = {};
 
     if (currentUser.role === 'manager') {
-      const User = require('../models/User');
+      const User = require('../models/Employee');
       const managedUsers = await User.find({
         $or: [
           { manager: currentUser._id },

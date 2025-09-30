@@ -1,6 +1,6 @@
 const express = require('express');
 const Project = require('../models/Project');
-const User = require('../models/User');
+const User = require('../models/Employee');
 const { auth, authorize } = require('../middleware/auth');
 const { logActivity } = require('../middleware/activityLogger');
 
@@ -202,6 +202,44 @@ router.put('/:id', auth, async (req, res) => {
       { oldStatus, newStatus: status, updatedBy: currentUser.role },
       req
     );
+
+    // Create notifications for project status changes
+    if (status && status !== oldStatus) {
+      const notificationService = require('../services/notificationService');
+      
+      // Notify assigned manager if status was changed by admin
+      if (project.assignedTo.toString() !== currentUser._id.toString()) {
+        await notificationService.createNotification({
+          recipient: project.assignedTo,
+          sender: currentUser._id,
+          type: 'project_status_change',
+          title: `Project Status Updated: ${project.title}`,
+          message: `Your project "${project.title}" status has been changed from "${oldStatus}" to "${status}" by ${currentUser.name}.`,
+          relatedProject: project._id,
+          priority: 'medium'
+        });
+      }
+
+      // Notify all team members working on this project
+      const Task = require('../models/Task');
+      const projectTasks = await Task.find({ project: project._id }).populate('assignedTo');
+      const notifiedUsers = new Set([project.assignedTo.toString()]);
+
+      for (const task of projectTasks) {
+        if (task.assignedTo && !notifiedUsers.has(task.assignedTo._id.toString())) {
+          await notificationService.createNotification({
+            recipient: task.assignedTo._id,
+            sender: currentUser._id,
+            type: 'project_status_change',
+            title: `Project Status Updated: ${project.title}`,
+            message: `The project "${project.title}" you're working on has been updated. Status changed to "${status}".`,
+            relatedProject: project._id,
+            priority: 'low'
+          });
+          notifiedUsers.add(task.assignedTo._id.toString());
+        }
+      }
+    }
 
     const updatedProject = await Project.findById(project._id)
       .populate('assignedTo', 'name email')

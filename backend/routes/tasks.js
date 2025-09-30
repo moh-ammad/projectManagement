@@ -1,7 +1,7 @@
 const express = require('express');
 const Task = require('../models/Task');
 const Project = require('../models/Project');
-const User = require('../models/User');
+const User = require('../models/Employee');
 const { auth, authorize } = require('../middleware/auth');
 const { logActivity } = require('../middleware/activityLogger');
 
@@ -70,6 +70,19 @@ router.post('/', auth, authorize('manager'), async (req, res) => {
       { projectTitle: project.title, assignedTo: assignedUser.name },
       req
     );
+
+    // Create notification for assigned user
+    const notificationService = require('../services/notificationService');
+    await notificationService.createNotification({
+      recipient: assignedTo,
+      sender: currentUser._id,
+      type: 'task_assignment',
+      title: `New Task Assignment: ${title}`,
+      message: `You have been assigned a new task "${title}" in project "${project.title}". Due date: ${dueDate ? new Date(dueDate).toLocaleDateString() : 'Not specified'}`,
+      relatedTask: task._id,
+      relatedProject: projectId,
+      priority: priority === 'high' ? 'high' : 'medium'
+    });
 
     const populatedTask = await Task.findById(task._id)
       .populate('assignedTo', 'name email')
@@ -209,6 +222,42 @@ router.put('/:id', auth, async (req, res) => {
       { oldStatus, newStatus: status, updatedBy: currentUser.role },
       req
     );
+
+    // Create notifications for status changes
+    if (status && status !== oldStatus) {
+      const notificationService = require('../services/notificationService');
+      
+      // Notify task assignee if status was changed by someone else
+      if (task.assignedTo.toString() !== currentUser._id.toString()) {
+        await notificationService.createNotification({
+          recipient: task.assignedTo,
+          sender: currentUser._id,
+          type: 'task_completion',
+          title: `Task Status Updated: ${task.title}`,
+          message: `Your task "${task.title}" status has been changed from "${oldStatus}" to "${status}" by ${currentUser.name}.`,
+          relatedTask: task._id,
+          relatedProject: task.project._id,
+          priority: 'medium'
+        });
+      }
+
+      // Notify manager when task is completed by employee
+      if (status === 'completed' && currentUser.role === 'user') {
+        const project = await Project.findById(task.project._id);
+        if (project && project.assignedTo.toString() !== currentUser._id.toString()) {
+          await notificationService.createNotification({
+            recipient: project.assignedTo,
+            sender: currentUser._id,
+            type: 'task_completion',
+            title: `Task Completed: ${task.title}`,
+            message: `${currentUser.name} has completed the task "${task.title}" in project "${task.project.title}".`,
+            relatedTask: task._id,
+            relatedProject: task.project._id,
+            priority: 'medium'
+          });
+        }
+      }
+    }
 
     const updatedTask = await Task.findById(task._id)
       .populate('assignedTo', 'name email')

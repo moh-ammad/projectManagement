@@ -22,7 +22,7 @@ const Tasks = () => {
   const [tasks, setTasks] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [projects, setProjects] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
@@ -44,7 +44,7 @@ const Tasks = () => {
     fetchTasks();
     if (user?.role === 'manager') {
       fetchProjects();
-      fetchUsers();
+      fetchEmployees();
     }
   }, [user]);
 
@@ -92,17 +92,17 @@ const Tasks = () => {
     }
   };
 
-  const fetchUsers = async () => {
+  const fetchEmployees = async () => {
     try {
       const response = await axios.get('/api/users');
-      // Only show users (not admins, managers, or current user)
-      setUsers(response.data.users.filter(u => 
+      // Only show employees (not admins, managers, or current user)
+      setEmployees(response.data.users.filter(u => 
         u.isActive && 
         u.role === 'user' && 
         u._id !== user.id
       ));
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error('Error fetching employees:', error);
     }
   };
 
@@ -498,7 +498,7 @@ const Tasks = () => {
                   required
                 >
                   <option value="">Select a user</option>
-                  {users.map(userItem => (
+                  {employees.map(userItem => (
                     <option key={userItem._id} value={userItem._id}>
                       {userItem.name} ({userItem.email})
                     </option>

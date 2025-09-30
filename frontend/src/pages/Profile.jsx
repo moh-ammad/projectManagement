@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import { User, Lock, Save, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
@@ -97,6 +98,28 @@ const Profile = () => {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Profile Settings</h1>
         <p className="text-gray-600">Manage your account settings and preferences</p>
+        
+        {/* Email Notification Info */}
+        <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-blue-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-blue-800">Email Notifications Setup</h3>
+              <div className="mt-1 text-sm text-blue-700">
+                <p>To receive email notifications for tasks, deadlines, and project updates:</p>
+                <ul className="mt-2 list-disc list-inside space-y-1">
+                  <li>Make sure your email address is correct in the profile below</li>
+                  <li>Visit <Link to="/settings" className="font-semibold underline">Settings</Link> to configure your notification preferences</li>
+                  <li>Check <Link to="/notifications" className="font-semibold underline">Notifications</Link> to see your recent alerts</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Message Display */}
@@ -167,7 +190,11 @@ const Profile = () => {
                     value={profileData.email}
                     onChange={(e) => setProfileData(prev => ({ ...prev, email: e.target.value }))}
                     required
+                    placeholder="your.email@company.com"
                   />
+                  <p className="text-sm text-blue-600 mt-1">
+                    📧 This email will be used for notifications about tasks, projects, and reminders
+                  </p>
                 </div>
 
                 <div>

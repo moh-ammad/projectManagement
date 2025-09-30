@@ -4,9 +4,9 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { UserPlus, Edit, Trash2, X, CheckCircle } from 'lucide-react'
 
-const Users = () => {
+const Employees = () => {
   const { user } = useAuth()
-  const [users, setUsers] = useState([])
+  const [employees, setEmployees] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editingUser, setEditingUser] = useState(null)
@@ -18,17 +18,17 @@ const Users = () => {
   })
 
   useEffect(() => {
-    fetchUsers()
+    fetchEmployees()
   }, [])
 
-  const fetchUsers = async () => {
+  const fetchEmployees = async () => {
     try {
       const response = await axios.get('/api/users')
       // Filter out admin users from the list
-      const filteredUsers = response.data.users.filter(userItem => userItem.role !== 'admin')
-      setUsers(filteredUsers)
+      const filteredEmployees = response.data.users.filter(userItem => userItem.role !== 'admin')
+      setEmployees(filteredEmployees)
     } catch (error) {
-      toast.error('Error fetching users')
+      toast.error('Error fetching employees')
     } finally {
       setLoading(false)
     }
@@ -39,57 +39,57 @@ const Users = () => {
 
     try {
       if (editingUser) {
-        // Update user
+        // Update employee
         await axios.put(`/api/users/${editingUser._id}`, {
           name: formData.name,
           email: formData.email,
           role: formData.role
         })
-        toast.success('User updated successfully')
+        toast.success('Employee updated successfully')
       } else {
-        // Create user
+        // Create employee
         await axios.post('/api/users', formData)
-        toast.success('User created successfully')
+        toast.success('Employee created successfully')
       }
 
-      fetchUsers()
+      fetchEmployees()
       closeModal()
     } catch (error) {
       toast.error(error.response?.data?.message || 'Operation failed')
     }
   }
 
-  const handleEdit = (userToEdit) => {
-    setEditingUser(userToEdit)
+  const handleEdit = (employeeToEdit) => {
+    setEditingUser(employeeToEdit)
     setFormData({
-      name: userToEdit.name,
-      email: userToEdit.email,
+      name: employeeToEdit.name,
+      email: employeeToEdit.email,
       password: '',
-      role: userToEdit.role
+      role: employeeToEdit.role
     })
     setShowModal(true)
   }
 
-  const handleDelete = async (userId) => {
-    if (window.confirm('Are you sure you want to deactivate this user?')) {
+  const handleDelete = async (employeeId) => {
+    if (window.confirm('Are you sure you want to deactivate this employee?')) {
       try {
-        await axios.delete(`/api/users/${userId}`)
-        toast.success('User deactivated successfully')
-        fetchUsers()
+        await axios.delete(`/api/users/${employeeId}`)
+        toast.success('Employee deactivated successfully')
+        fetchEmployees()
       } catch (error) {
-        toast.error(error.response?.data?.message || 'Failed to deactivate user')
+        toast.error(error.response?.data?.message || 'Failed to deactivate employee')
       }
     }
   }
 
-  const handleReactivate = async (userId) => {
-    if (window.confirm('Are you sure you want to reactivate this user?')) {
+  const handleReactivate = async (employeeId) => {
+    if (window.confirm('Are you sure you want to reactivate this employee?')) {
       try {
-        await axios.put(`/api/users/${userId}`, { isActive: true })
-        toast.success('User reactivated successfully')
-        fetchUsers()
+        await axios.put(`/api/users/${employeeId}`, { isActive: true })
+        toast.success('Employee reactivated successfully')
+        fetchEmployees()
       } catch (error) {
-        toast.error(error.response?.data?.message || 'Failed to reactivate user')
+        toast.error(error.response?.data?.message || 'Failed to reactivate employee')
       }
     }
   }
@@ -105,7 +105,7 @@ const Users = () => {
     })
   }
 
-  const canCreateUser = user?.role === 'admin' || user?.role === 'manager'
+  const canCreateEmployee = user?.role === 'admin' || user?.role === 'manager'
   const availableRoles = user?.role === 'admin' ? ['manager', 'user'] : ['user']
 
   if (loading) {
@@ -124,28 +124,28 @@ const Users = () => {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
-              User Management
+              Employee Management
             </h1>
             <p className="text-gray-600 mt-1">
-              Manage users and their roles
+              Manage employees and their roles
             </p>
           </div>
 
-          {canCreateUser && (
+          {canCreateEmployee && (
             <button
               onClick={() => setShowModal(true)}
               className="btn btn-primary"
             >
               <UserPlus size={16} />
-              Add User
+              Add Employee
             </button>
           )}
         </div>
 
-        {users.length === 0 ? (
+        {employees.length === 0 ? (
           <div className="text-center py-12">
             <UserPlus className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-            <p className="text-gray-500">No users found.</p>
+            <p className="text-gray-500">No employees found.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -173,7 +173,7 @@ const Users = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {users.map((userItem) => (
+                {employees.map((userItem) => (
                   <tr key={userItem._id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {userItem.name}
@@ -199,7 +199,7 @@ const Users = () => {
                         <button
                           onClick={() => handleEdit(userItem)}
                           className="text-indigo-600 hover:text-indigo-900"
-                          title="Edit User"
+                          title="Edit Employee"
                         >
                           <Edit size={16} />
                         </button>
@@ -207,7 +207,7 @@ const Users = () => {
                           <button
                             onClick={() => handleDelete(userItem._id)}
                             className="text-red-600 hover:text-red-900"
-                            title="Deactivate User"
+                            title="Deactivate Employee"
                           >
                             <Trash2 size={16} />
                           </button>
@@ -215,7 +215,7 @@ const Users = () => {
                           <button
                             onClick={() => handleReactivate(userItem._id)}
                             className="text-green-600 hover:text-green-900"
-                            title="Reactivate User"
+                            title="Reactivate Employee"
                           >
                             <CheckCircle size={16} />
                           </button>
@@ -236,7 +236,7 @@ const Users = () => {
           <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-medium text-gray-900">
-                {editingUser ? 'Edit User' : 'Create New User'}
+                {editingUser ? 'Edit Employee' : 'Create New Employee'}
               </h3>
               <button onClick={closeModal} className="text-gray-400 hover:text-gray-600">
                 <X size={20} />
@@ -308,7 +308,7 @@ const Users = () => {
                   type="submit"
                   className="btn btn-primary"
                 >
-                  {editingUser ? 'Update User' : 'Create User'}
+                  {editingUser ? 'Update Employee' : 'Create Employee'}
                 </button>
               </div>
             </form>
@@ -319,4 +319,4 @@ const Users = () => {
   )
 }
 
-export default Users
+export default Employees

@@ -202,7 +202,7 @@ const Reports = () => {
               <div className="text-3xl font-bold mb-2">{reportData.overview.activeUsers || 0}</div>
               <div className="flex items-center text-sm opacity-90">
                 <Users size={16} className="mr-2" />
-                Active Users
+                Active Employees
               </div>
             </div>
 
@@ -276,17 +276,17 @@ const Reports = () => {
             )}
           </div>
 
-          {/* User Performance */}
+          {/* Employee Performance */}
           {user?.role === 'admin' && (
             <div className="card">
               <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
                 <User className="mr-2" size={20} />
-                User Performance
+                Employee Performance
               </h2>
               
               {reportData.userStats.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-gray-500">No user performance data available.</p>
+                  <p className="text-gray-500">No employee performance data available.</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
