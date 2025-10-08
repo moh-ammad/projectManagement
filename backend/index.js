@@ -8,7 +8,31 @@ require('dotenv').config({ path: './.env.example' });
 const app = express();
 
 // Middleware
-app.use(cors());
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200
+};
+
+// Apply global CORS middleware
+app.use(cors(corsOptions));
+
+// Universal preflight handler
+app.options('/{*splat}', cors(corsOptions));
+
 app.use(express.json());
 
 
