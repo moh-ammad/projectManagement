@@ -8,7 +8,7 @@ const app = express();
 
 // ✅ Allowed Origins
 const allowedOrigins = [
-  'https://project-management-6q4q.vercel.app',
+  process.env.FRONTEND_URL,
   'http://localhost:5173',
 ];
 
