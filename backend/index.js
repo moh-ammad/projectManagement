@@ -9,7 +9,7 @@ const app = express();
 
 // Middleware
 const allowedOrigins = [
-  process.env.CLIENT_URL,
+  process.env.FRONTEND_URL,
   'http://localhost:5173',
 ];
 
