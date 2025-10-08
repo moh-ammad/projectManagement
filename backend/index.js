@@ -1,7 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
+const connectToDb = require('./db/connection');
+require('dotenv').config({ path: './.env.example' });
+
 
 const app = express();
 
@@ -9,8 +11,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+console.log("Loaded MONGO_URI:", process.env.MONGO_URI);
+
 // Database connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/admin_dashboard')
+connectToDb()
   .then(() => {
     console.log('MongoDB connected');
     // Initialize notification scheduler after DB connection
@@ -28,8 +32,9 @@ app.use('/api/activities', require('./routes/activities'));
 app.use('/api/reports', require('./routes/reports'));
 app.use('/api/settings', require('./routes/settings'));
 app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/rvm', require('./routes/rvm'));
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

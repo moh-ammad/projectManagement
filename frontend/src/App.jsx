@@ -17,6 +17,9 @@ import Reports from './pages/Reports.jsx'
 import Settings from './pages/Settings.jsx'
 import Profile from './pages/Profile.jsx'
 import Notifications from './pages/Notifications.jsx'
+import Services from './pages/Services.jsx'
+import CreateRVM from './pages/CreateRVM.jsx'
+import EditRVM from './pages/EditRVM.jsx'
 
 const ProtectedLayout = ({ children }) => (
   <ProtectedRoute>
@@ -39,77 +42,102 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route 
-              path="/dashboard" 
+            <Route
+              path="/dashboard"
               element={
                 <ProtectedLayout>
                   <Dashboard />
                 </ProtectedLayout>
-              } 
+              }
             />
-            <Route 
-              path="/users" 
+            <Route
+              path="/users"
               element={
                 <ProtectedLayout>
                   <Employees />
                 </ProtectedLayout>
-              } 
+              }
             />
-            <Route 
-              path="/projects" 
+            <Route
+              path="/projects"
               element={
                 <ProtectedLayout>
                   <Projects />
                 </ProtectedLayout>
-              } 
+              }
             />
-            <Route 
-              path="/tasks" 
+            <Route
+              path="/tasks"
               element={
                 <ProtectedLayout>
                   <Tasks />
                 </ProtectedLayout>
-              } 
+              }
             />
-            <Route 
-              path="/activities" 
+            <Route
+              path="/activities"
               element={
                 <ProtectedLayout>
                   <Activities />
                 </ProtectedLayout>
-              } 
+              }
             />
-            <Route 
-              path="/reports" 
+            <Route
+              path="/reports"
               element={
                 <ProtectedLayout>
                   <Reports />
                 </ProtectedLayout>
-              } 
+              }
             />
-            <Route 
-              path="/settings" 
+            <Route
+              path="/settings"
               element={
                 <ProtectedLayout>
                   <Settings />
                 </ProtectedLayout>
-              } 
+              }
             />
-                        <Route 
-              path="/profile" 
+            <Route
+              path="/profile"
               element={
                 <ProtectedLayout>
                   <Profile />
                 </ProtectedLayout>
-              } 
+              }
             />
-            <Route 
-              path="/notifications" 
+            <Route
+              path="/services"
+              element={
+                <ProtectedLayout>
+                  <Services />
+                </ProtectedLayout>
+              }
+            />
+            <Route
+              path="/services/create"
+              element={
+                <ProtectedLayout>
+                  <CreateRVM />
+                </ProtectedLayout>
+              }
+            />
+            <Route
+              path="/services/edit/:id"
+              element={
+                <ProtectedLayout>
+                  <EditRVM />
+                </ProtectedLayout>
+              }
+            />
+
+            <Route
+              path="/notifications"
               element={
                 <ProtectedLayout>
                   <Notifications />
                 </ProtectedLayout>
-              } 
+              }
             />
             {/* Catch all unmatched routes and redirect to dashboard if authenticated, otherwise to login */}
             <Route path="*" element={<Navigate to="/login" replace />} />

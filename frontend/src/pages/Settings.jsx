@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { 
-  Settings as SettingsIcon, 
-  Save, 
+import {
+  Settings as SettingsIcon,
+  Save,
   RefreshCw,
-  Shield,
-  Clock,
-  AlertTriangle,
+  Shield, AlertTriangle,
   CheckCircle
 } from 'lucide-react';
 
