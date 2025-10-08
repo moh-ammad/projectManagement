@@ -9,8 +9,8 @@ const app = express();
 
 // Middleware
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  'http://localhost:5173',
+  'https://project-management-6q4q.vercel.app',
+  'http://localhost:5173'
 ];
 
 const corsOptions = {
@@ -26,11 +26,12 @@ const corsOptions = {
   optionsSuccessStatus: 200
 };
 
-// Apply global CORS middleware
+// Apply CORS to all routes
 app.use(cors(corsOptions));
 
-// Universal preflight handler
-app.options('/{*splat}', cors(corsOptions));
+// Handle preflight for all routes
+app.options('*', cors(corsOptions));
+
 
 app.use(express.json());
 
