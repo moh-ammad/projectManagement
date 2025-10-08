@@ -4,17 +4,17 @@ const cors = require('cors');
 const connectToDb = require('./db/connection');
 require('dotenv').config({ path: './.env.example' });
 
-
 const app = express();
 
-// Middleware
+// ✅ Allowed Origins
 const allowedOrigins = [
   'https://project-management-6q4q.vercel.app',
-  'http://localhost:5173'
+  'http://localhost:5173',
 ];
 
+// ✅ CORS Options
 const corsOptions = {
-  origin: (origin, callback) => {
+  origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -23,28 +23,25 @@ const corsOptions = {
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
 };
 
-// Apply CORS to all routes
-app.options('/{*splat}', cors(corsOptions));
+// ✅ Apply CORS globally
+app.use(cors(corsOptions));
 
-
-
+// ✅ Accept JSON payloads
 app.use(express.json());
 
-
-// Database connection
+// ✅ Connect to DB
 connectToDb()
   .then(() => {
     console.log('MongoDB connected');
-    // Initialize notification scheduler after DB connection
     const schedulerService = require('./services/schedulerService');
     schedulerService.init();
   })
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Routes
+// ✅ Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/employees'));
 app.use('/api/projects', require('./routes/projects'));
@@ -55,6 +52,7 @@ app.use('/api/settings', require('./routes/settings'));
 app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/rvm', require('./routes/rvm'));
 
+// ✅ Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
