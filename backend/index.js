@@ -11,7 +11,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-console.log("Loaded MONGO_URI:", process.env.MONGO_URI);
 
 // Database connection
 connectToDb()
