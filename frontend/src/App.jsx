@@ -18,7 +18,7 @@ import Settings from './pages/Settings.jsx'
 import Profile from './pages/Profile.jsx'
 import Notifications from './pages/Notifications.jsx'
 import Services from './pages/Services.jsx'
-import EditRVM from './pages/EditRVM.jsx'
+import EditRVM from './pages/EditRvm.jsx'
 import CreateRvm from './pages/CreateRvm.jsx'
 
 const ProtectedLayout = ({ children }) => (
