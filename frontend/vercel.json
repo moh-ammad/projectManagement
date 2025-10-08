@@ -5,7 +5,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://projectmanagement-pop4.onrender.com/api/$1"
+      "destination": "https://projectmanagement-7b7a.onrender.com/api/$1"
     },
     {
       "source": "/((?!api).*)",
