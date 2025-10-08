@@ -29,6 +29,9 @@ const corsOptions = {
 // ✅ Apply CORS globally
 app.use(cors(corsOptions));
 
+// Universal preflight handler
+app.options('/{*splat}', cors(corsOptions));
+
 // ✅ Accept JSON payloads
 app.use(express.json());
 
