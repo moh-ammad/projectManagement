@@ -18,8 +18,8 @@ import Settings from './pages/Settings.jsx'
 import Profile from './pages/Profile.jsx'
 import Notifications from './pages/Notifications.jsx'
 import Services from './pages/Services.jsx'
-import CreateRVM from './pages/CreateRVM.jsx'
 import EditRVM from './pages/EditRVM.jsx'
+import CreateRvm from './pages/CreateRvm.jsx'
 
 const ProtectedLayout = ({ children }) => (
   <ProtectedRoute>
@@ -118,7 +118,7 @@ function App() {
               path="/services/create"
               element={
                 <ProtectedLayout>
-                  <CreateRVM />
+                  <CreateRvm />
                 </ProtectedLayout>
               }
             />
