@@ -29,8 +29,6 @@ const corsOptions = {
 // Apply CORS to all routes
 app.options('/{*splat}', cors(corsOptions));
 
-// Handle preflight for all routes
-app.options('*', cors(corsOptions));
 
 
 app.use(express.json());
