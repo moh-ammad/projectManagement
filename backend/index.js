@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const connectToDb = require('./db/connection');
-require('dotenv').config({ path: './.env.example' });
+require('dotenv').config({ path: './.env' });
 
 const app = express();
 
@@ -11,6 +11,7 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,
   'http://localhost:5173',
 ];
+
 
 // ✅ CORS Options
 const corsOptions = {
