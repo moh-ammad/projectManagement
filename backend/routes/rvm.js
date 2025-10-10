@@ -40,6 +40,33 @@ router.post("/", async (req, res) => {
   }
 });
 
+//get all rvms
+router.get("/media", async (req, res) => {
+  try {
+    const response = await axios.get("https://api.dropcowboy.com/v1/media", {
+      headers: {
+        "Content-Type": "application/json",
+        "x-team-id": process.env.TEAM_ID,
+        "x-secret": process.env.SECRET
+      }
+    });
+
+    // console.log("✅ DropCowboy media fetched:", response.data);
+
+    res.status(200).json({
+      message: "Media fetched from DropCowboy",
+      data: response.data
+    });
+
+  } catch (error) {
+    console.error("❌ Error fetching media:", error.response?.data || error.message);
+    res.status(500).json({
+      message: "Failed to fetch media",
+      error: error.response?.data || error.message
+    });
+  }
+});
+
 // READ ALL - GET /api/rvm
 router.get("/", async (req, res) => {
   try {

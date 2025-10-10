@@ -1,4 +1,4 @@
-// components/TimeRangeDropdown.jsx
+// src/components/TimeRangeDropdown.jsx
 const TimeRangeDropdown = ({ value, onChange }) => {
   return (
     <div className="w-full max-w-xs">
@@ -12,27 +12,13 @@ const TimeRangeDropdown = ({ value, onChange }) => {
         id="time-range"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="
-          w-full
-          px-4
-          py-2.5
-          rounded-md
-          bg-white
-          text-gray-800
-          border border-indigo-500
-          shadow-sm
-          focus:outline-none
-          focus:ring-2
-          focus:ring-indigo-400
-          hover:border-indigo-600
-          transition
-        "
+        className="w-full px-4 py-2.5 rounded-md bg-white text-gray-800 border border-indigo-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 hover:border-indigo-600 transition"
       >
-        <option value="15m">15 minutes</option>
-        <option value="1h">1 hour</option>
-        <option value="1d">1 day</option>
-        <option value="1w">1 week</option>
-        <option value="1mo">1 month</option>
+        <option value="15m">Last 15 minutes</option>
+        <option value="1h">Last 1 hour</option>
+        <option value="1d">Last 1 day</option>
+        <option value="1w">Last 1 week</option>
+        <option value="1mo">Last 1 month</option>
       </select>
     </div>
   );

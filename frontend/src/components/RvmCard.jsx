@@ -1,14 +1,16 @@
-import { Pencil, Trash2, Phone } from "lucide-react";
+// src/components/RvmCard.jsx
+import { Pencil, Trash2 } from "lucide-react";
 
 const RvmCard = ({ data, onEdit, onDelete }) => {
+  const date = new Date(Number(data.created_at)).toLocaleDateString("en-GB");
   return (
-    <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition">
+    <div className="bg-white p-4 rounded-md shadow hover:shadow-lg transition">
       <div className="flex justify-between items-center mb-2">
-        <h2 className="text-lg font-bold flex items-center gap-1">
-          <Phone className="text-red-500 w-4 h-4" />
-          {data.phone_number}
-        </h2>
-        <div className="flex gap-2">
+        <div>
+          <p className="text-sm text-gray-500">{date}</p>
+          <h3 className="text-lg font-semibold text-gray-800">{data.name}</h3>
+        </div>
+        <div className="flex space-x-3">
           <button onClick={onEdit} className="text-blue-600 hover:text-blue-800">
             <Pencil size={18} />
           </button>
@@ -17,27 +19,6 @@ const RvmCard = ({ data, onEdit, onDelete }) => {
           </button>
         </div>
       </div>
-
-      <p className="text-sm text-gray-600 mb-1">
-        <span className="font-medium">Forwarding:</span> {data.forwarding_number}
-      </p>
-      <p className="text-sm text-gray-600 mb-1">
-        <span className="font-medium">Team ID:</span> {data.team_id}
-      </p>
-      <p className="text-sm text-gray-600 mb-1">
-        <span className="font-medium">Brand ID:</span> {data.brand_id}
-      </p>
-      <p className="text-sm text-gray-600 mb-1">
-        <span className="font-medium">Foreign ID:</span> {data.foreign_id}
-      </p>
-      <p className="text-sm text-gray-600 mb-1">
-        <span className="font-medium">Recording ID:</span> {data.recording_id}
-      </p>
-      {data.createdAt && (
-        <p className="text-xs text-gray-400 mt-2">
-          Created: {new Date(data.createdAt).toLocaleString()}
-        </p>
-      )}
     </div>
   );
 };
